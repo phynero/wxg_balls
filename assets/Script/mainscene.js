@@ -21,10 +21,6 @@ cc.Class({
         ball6 : cc.Node,
         ball7 : cc.Node,
         ball8 : cc.Node,
-        ball9 : cc.Node,
-        ball10 : cc.Node,
-        ball11 : cc.Node,
-        ball12 : cc.Node,
 
         curScore : null,
 
@@ -55,7 +51,6 @@ cc.Class({
         this.v_lFall = []
         this.v_rFall = []
         this.curScore = 0
-        this.clearjudgecache()
         this.initboard()
     },
     clearjudgecache(){
@@ -74,6 +69,7 @@ cc.Class({
     },
     start(){
         this.initballs()
+        this.clearjudgecache()
         this.randball()
         this.setRandomBalls()
     },
@@ -146,9 +142,7 @@ cc.Class({
                 this.ballsArray[pid].cid = cid
                 this.touchCid = cid
                 this.clearjudgecache()
-                // console.log("===== pid")
-                // console.log(pid)
-                this.judge(pid,1,1,1,1,1,1,1,1)
+                this.judge(pid,1,1,1,1,1,1,1,1,false)
             }
         }
 
@@ -166,10 +160,6 @@ cc.Class({
         this.ball6.active = this.randballCid == 5
         this.ball7.active = this.randballCid == 6
         this.ball8.active = this.randballCid == 7
-        this.ball9.active = this.randballCid == 8
-        this.ball10.active = this.randballCid == 9
-        this.ball11.active = this.randballCid == 10
-        this.ball12.active = this.randballCid == 11
     },
 
     onChessPut(pid){
@@ -178,15 +168,15 @@ cc.Class({
         this.touchCid = this.randballCid
         this.randball()
         this.clearjudgecache()
-        this.judge(pid,1,1,1,1,1,1,1,1)
-        this.setRandomBalls()
+        this.judge(pid,1,1,1,1,1,1,1,1,true)
+        // this.setRandomBalls()
     },
 
     /* 
     1
     0 10
     */
-    judge(pid,u,ru,r,rd,d,ld,l,lu){
+    judge(pid,u,ru,r,rd,d,ld,l,lu,istouch){
         let ball_u_pid = (pid % 10 == 9) ? null : pid + 1
         let ball_ru_pid = (pid % 10 == 9 || pid >= 90) ? null : pid + 11
         let ball_r_pid = (pid >= 90) ? null : pid + 10
@@ -196,7 +186,7 @@ cc.Class({
         let ball_l_pid = (pid < 10) ? null : pid - 10
         let ball_lu_pid = (pid % 10 == 9 || pid < 10) ? null : pid - 9
 
-        var callfunc = function(self){
+        var callfunc = function(self,istouch_){
             if( self.v_vert_flag1 && self.v_vert_flag2 
                 && self.v_hori_flag1 && self.v_hori_flag2 
                 && self.v_lFall_flag1 && self.v_lFall_flag2 
@@ -233,6 +223,9 @@ cc.Class({
                 if(self.v_rFall.length >= 5){
                     arrangefunc(self,self.v_rFall)
                 }
+                if(istouch_ && self.v_vert.length < 5 && self.v_hori.length < 5 && self.v_lFall.length < 5 && self.v_rFall.length < 5 ){
+                    self.setRandomBalls()
+                }
             }
         }
         if( u == 1 || d == 1){
@@ -240,26 +233,26 @@ cc.Class({
             this.v_vert.push(pid)
             if(ball_u_pid != null){
                 if(u == 1 && this.ballsArray[ball_u_pid].comp.isAlive && this.touchCid == this.ballsArray[ball_u_pid].cid){
-                    this.judge(ball_u_pid,1,0,0,0,0,0,0,0)
+                    this.judge(ball_u_pid,1,0,0,0,0,0,0,0,istouch)
                 }else{
                     this.v_vert_flag1 = true
-                    callfunc(this)
+                    callfunc(this,istouch)
                 }
             }else{
                 this.v_vert_flag1 = true
-                callfunc(this)
+                callfunc(this,istouch)
             }
 
             if(ball_d_pid != null){
                 if(d == 1 && this.ballsArray[ball_d_pid].comp.isAlive && this.touchCid == this.ballsArray[ball_d_pid].cid){
-                    this.judge(ball_d_pid,0,0,0,0,1,0,0,0)
+                    this.judge(ball_d_pid,0,0,0,0,1,0,0,0,istouch)
                 }else{
                     this.v_vert_flag2 = true
-                    callfunc(this)
+                    callfunc(this,istouch)
                 }
             }else{
                 this.v_vert_flag2 = true
-                callfunc(this)
+                callfunc(this,istouch)
             }
         }
         if( l == 1 || r == 1){
@@ -267,26 +260,26 @@ cc.Class({
             this.v_hori.push(pid)
             if(ball_l_pid != null){
                 if(l == 1 && this.ballsArray[ball_l_pid].comp.isAlive && this.touchCid == this.ballsArray[ball_l_pid].cid){
-                    this.judge(ball_l_pid,0,0,0,0,0,0,1,0)
+                    this.judge(ball_l_pid,0,0,0,0,0,0,1,0,istouch)
                 }else{
                     this.v_hori_flag1 = true
-                    callfunc(this)
+                    callfunc(this,istouch)
                 }
             }else{
                 this.v_hori_flag1 = true
-                callfunc(this)
+                callfunc(this,istouch)
             }
 
             if(ball_r_pid != null){
                 if(r == 1 && this.ballsArray[ball_r_pid].comp.isAlive && this.touchCid == this.ballsArray[ball_r_pid].cid){
-                    this.judge(ball_r_pid,0,0,1,0,0,0,0,0)
+                    this.judge(ball_r_pid,0,0,1,0,0,0,0,0,istouch)
                 }else{
                     this.v_hori_flag2 = true
-                    callfunc(this)
+                    callfunc(this,istouch)
                 }
             }else{
                 this.v_hori_flag2 = true
-                callfunc(this)
+                callfunc(this,istouch)
             }
         }
         if( lu == 1 || rd == 1){
@@ -294,26 +287,26 @@ cc.Class({
             this.v_rFall.push(pid)
             if(ball_lu_pid != null){
                 if(lu == 1 && this.ballsArray[ball_lu_pid].comp.isAlive && this.touchCid == this.ballsArray[ball_lu_pid].cid){
-                    this.judge(ball_lu_pid,0,0,0,0,0,0,0,1)
+                    this.judge(ball_lu_pid,0,0,0,0,0,0,0,1,istouch)
                 }else{
                     this.v_rFall_flag1 = true
-                    callfunc(this)
+                    callfunc(this,istouch)
                 }
             }else{
                 this.v_rFall_flag1 = true
-                callfunc(this)
+                callfunc(this,istouch)
             }
 
             if(ball_rd_pid != null){
                 if(rd == 1 && this.ballsArray[ball_rd_pid].comp.isAlive && this.touchCid == this.ballsArray[ball_rd_pid].cid){
-                    this.judge(ball_rd_pid,0,0,0,1,0,0,0,0)
+                    this.judge(ball_rd_pid,0,0,0,1,0,0,0,0,istouch)
                 }else{
                     this.v_rFall_flag2 = true
-                    callfunc(this)
+                    callfunc(this,istouch)
                 }
             }else{
                 this.v_rFall_flag2 = true
-                callfunc(this)
+                callfunc(this,istouch)
             }
         }
         if( ru == 1 || ld == 1){
@@ -321,29 +314,31 @@ cc.Class({
             this.v_lFall.push(pid)
             if(ball_ru_pid != null){
                 if(ru == 1 && this.ballsArray[ball_ru_pid].comp.isAlive && this.touchCid == this.ballsArray[ball_ru_pid].cid){
-                    this.judge(ball_ru_pid,0,1,0,0,0,0,0,0)
+                    this.judge(ball_ru_pid,0,1,0,0,0,0,0,0,istouch)
                 }else{
                     this.v_lFall_flag1 = true
-                    callfunc(this)
+                    callfunc(this,istouch)
                 }
             }else{
                 this.v_lFall_flag1 = true
-                callfunc(this)
+                callfunc(this,istouch)
             }
 
             if(ball_ld_pid != null){
                 if(ld == 1 &&this.ballsArray[ball_ld_pid].comp.isAlive && this.touchCid == this.ballsArray[ball_ld_pid].cid){
-                    this.judge(ball_ld_pid,0,0,0,0,0,1,0,0)
+                    this.judge(ball_ld_pid,0,0,0,0,0,1,0,0,istouch)
                 }else{
                     this.v_lFall_flag2 = true
-                    callfunc(this)
+                    callfunc(this,istouch)
                 }
             }else{
                 this.v_lFall_flag2 = true
-                callfunc(this)
+                callfunc(this,istouch)
             }
         }
     },
+
+    // 消除
     clearchesses(){
         // console.log("#####    clearchesses()")
         // console.log(this.ballsCleanArray)
@@ -354,16 +349,34 @@ cc.Class({
         this.curScore += this.ballsCleanArray.length
         this.lb_curScore.string = this.curScore
     },
+
+    clearAll(){
+        for (let i = 0; i < 100; i++) {
+            this.ballsArray[i].cid = null
+            this.ballsArray[i].comp.removed()
+        }
+
+        this.lb_curScore.string = "0"
+        this.clearjudgecache()
+        this.randball()
+        this.setRandomBalls()
+    },
+
     gameover(){
+        var self = this
         wx.showModal({
             title: '',
             content: '无子可落,游戏结束!',
             confirmText:'重新开始',
             showCancel:false,
             success: function(res) {
-
+                self.clearAll()
             }
         })
+    },
+    onRegame(){
+        // wx.exitMiniProgram({})
+        this.clearAll()
     },
     update: function (dt) {
 

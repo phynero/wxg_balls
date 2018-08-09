@@ -156,10 +156,6 @@
             <filename>p6.png</filename>
             <filename>p7.png</filename>
             <filename>p8.png</filename>
-            <filename>p9.png</filename>
-            <filename>p10.png</filename>
-            <filename>p11.png</filename>
-            <filename>p12.png</filename>
         </array>
         <key>ignoreFileList</key>
         <array/>

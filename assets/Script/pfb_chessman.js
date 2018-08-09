@@ -10,10 +10,6 @@ cc.Class({
         p6 : cc.Node,
         p7 : cc.Node,
         p8 : cc.Node,
-        p9 : cc.Node,
-        p10 : cc.Node,
-        p11 : cc.Node,
-        p12 : cc.Node,
 
         cur_Id : null,
         pos_Id : null,
@@ -48,10 +44,6 @@ cc.Class({
         this.p6.active = this.cur_Id == 5 && this.isAlive
         this.p7.active = this.cur_Id == 6 && this.isAlive
         this.p8.active = this.cur_Id == 7 && this.isAlive
-        this.p9.active = this.cur_Id == 8 && this.isAlive
-        this.p10.active = this.cur_Id == 9 && this.isAlive
-        this.p11.active = this.cur_Id == 10 && this.isAlive
-        this.p12.active = this.cur_Id == 12 && this.isAlive
     },
 
     setCid(id){

@@ -70,8 +70,8 @@
     "relativePath": "Texture/singleColor.png"
   },
   "94acb95a-87ed-4170-98de-06f5eb9dbefc": {
-    "asset": 1533779403235,
-    "meta": 1533779403246,
+    "asset": 1533785820258,
+    "meta": 1533785820267,
     "relativePath": "Scene/mainscene.fire"
   },
   "1d71d739-5265-404d-9d33-2ae842c34475": {
@@ -84,24 +84,14 @@
     "meta": 1533637694052,
     "relativePath": "balls"
   },
-  "5d373326-863b-48e8-bd5a-06ae2ffd6151": {
-    "asset": 1533637853239,
-    "meta": 1533637876532,
-    "relativePath": "Texture/balls_res.plist"
-  },
-  "b270d211-c1e3-4249-bd7f-5b6709e8007b": {
-    "asset": 1533637853236,
-    "meta": 1533637876512,
-    "relativePath": "Texture/balls_res.png"
-  },
   "ee2491ae-830f-4120-9a34-de0165a998d3": {
     "asset": 1533659124353,
     "meta": 1533659117675,
     "relativePath": "prefab"
   },
   "649029c6-8995-439b-8274-8365e3c4a43d": {
-    "asset": 1533702282230,
-    "meta": 1533702282238,
+    "asset": 1533785881170,
+    "meta": 1533785881186,
     "relativePath": "prefab/pfb_chessman.prefab"
   },
   "8c5001fd-07ee-4a4b-a8a0-63e15195e94d": {
@@ -314,14 +304,24 @@
     "meta": 1533713846009,
     "relativePath": "prefab/videoplayer.prefab"
   },
+  "5d373326-863b-48e8-bd5a-06ae2ffd6151": {
+    "asset": 1533785784559,
+    "meta": 1533785804093,
+    "relativePath": "Texture/balls_res.plist"
+  },
+  "b270d211-c1e3-4249-bd7f-5b6709e8007b": {
+    "asset": 1533785784557,
+    "meta": 1533785804077,
+    "relativePath": "Texture/balls_res.png"
+  },
   "3f199fb4-505f-4c7c-b17b-5400c8aeeca8": {
-    "asset": 1533746265463,
-    "meta": 1533746266433,
+    "asset": 1533785994133,
+    "meta": 1533786012340,
     "relativePath": "Script/pfb_chessman.js"
   },
   "280c3aec-6492-4a9d-9f51-a9b00b570b4a": {
-    "asset": 1533779493432,
-    "meta": 1533779514245,
+    "asset": 1533788895812,
+    "meta": 1533788897525,
     "relativePath": "Script/mainscene.js"
   }
 }
