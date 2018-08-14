@@ -88,7 +88,7 @@ cc.Class({
         for (let index = 0; index < 11; index++) {
             let ctx_row = this.board.getComponent(cc.Graphics); // 行
             ctx_row.lineWidth = 2
-            ctx_row.strokeColor = cc.hexToColor('#ffffff');
+            ctx_row.strokeColor = cc.hexToColor('#555555');
             ctx_row.fillColor = cc.hexToColor('#ffde59');
             ctx_row.moveTo(0,index*60)
             ctx_row.lineTo(600,index*60)
@@ -96,7 +96,7 @@ cc.Class({
 
             let ctx_col = this.board.getComponent(cc.Graphics); // 列  
             ctx_col.lineWidth = 2
-            ctx_col.strokeColor = cc.hexToColor('#ffffff');
+            ctx_col.strokeColor = cc.hexToColor('#555555');
             ctx_col.fillColor = cc.hexToColor('#ffde59');
             ctx_col.moveTo(index*60,0)
             ctx_col.lineTo(index*60,600)
@@ -108,7 +108,7 @@ cc.Class({
         for (let i = 0; i < 10; i++) {
             for (let j = 0; j < 10; j++) {
                 var chessman = cc.instantiate(this.chessman);
-                var chessmancomp = chessman.getComponent("pfb_chessman");
+                var chessmancomp = chessman.getComponent("comp_pfb_chessman");
                 chessman.parent = this.board
                 chessman.x = i*60
                 chessman.y = j*60
@@ -119,6 +119,8 @@ cc.Class({
     },
 
     setRandomBalls(num,temparray){
+        // this.canTouch = true
+        // return
         // console.log("------> setRandomBalls()")
         if(num > 2){
             this.canTouch = true
@@ -164,7 +166,9 @@ cc.Class({
         // console.log("")
         // console.log("")
         // console.log("落子")
-        if(this.canTouch == false){return}
+        if(this.canTouch == false){
+            // console.log("this.canTouch == false  落子失败")
+            return}
         this.canTouch = false
 
         this.ballsArray[pid].comp.setCid(this.randballCid)
@@ -182,7 +186,7 @@ cc.Class({
     */
     judge(pid,u,ru,r,rd,d,ld,l,lu,istouch,curnum,judgeid){
         judgeid += 1
-        // console.log(" 进入judge()  第几次curnum "+curnum + "  judgeID "+judgeid)
+        // console.log(" 进入judge()  pid "+pid+"   第几次curnum "+curnum + "  judgeID "+judgeid)
         // this.canRand = false
         let ball_u_pid = (pid % 10 == 9) ? null : pid + 1
         let ball_ru_pid = (pid % 10 == 9 || pid >= 90) ? null : pid + 11
@@ -258,8 +262,10 @@ cc.Class({
         if( u == 1 || d == 1){
             this.v_vert.push(pid)
             // console.log("   ---------------------judge 竖+ "+this.v_vert.length + "  judgeID "+judgeid)
-            if(ball_u_pid != null){
-                if(u == 1 && this.ballsArray[ball_u_pid].comp.isAlive && this.touchCid == this.ballsArray[ball_u_pid].cid){
+            // console.log("#######  this.v_vert 数组")
+            // console.log(this.v_vert)
+            if(u == 1 && ball_u_pid != null){
+                if(this.ballsArray[ball_u_pid].comp.isAlive && this.touchCid == this.ballsArray[ball_u_pid].cid){
                     // console.log("   ---------------------judge 上 继续搜索" + "  judgeID "+judgeid)
                     this.judge(ball_u_pid,1,0,0,0,0,0,0,0,istouch,curnum,judgeid)
                 }else if(this.v_vert_flag1 == false){
@@ -267,14 +273,14 @@ cc.Class({
                     this.v_vert_flag1 = true
                     callfunc(this,curnum,istouch)
                 }
-            }else if(this.v_vert_flag1 == false){
+            }else if(u == 1 && this.v_vert_flag1 == false){
                 // console.log("   ---------------------judge 上 ball_u_pid 不存在 搜索结束 开始回调" + "  judgeID "+judgeid)
                 this.v_vert_flag1 = true
                 callfunc(this,curnum,istouch)
             }
 
-            if(ball_d_pid != null){
-                if(d == 1 && this.ballsArray[ball_d_pid].comp.isAlive && this.touchCid == this.ballsArray[ball_d_pid].cid){
+            if(d == 1 && ball_d_pid != null){
+                if(this.ballsArray[ball_d_pid].comp.isAlive && this.touchCid == this.ballsArray[ball_d_pid].cid){
                     // console.log("   ---------------------judge 下 继续搜索" + "  judgeID "+judgeid)
                     this.judge(ball_d_pid,0,0,0,0,1,0,0,0,istouch,curnum,judgeid)
                 }else if(this.v_vert_flag2 == false){
@@ -282,7 +288,7 @@ cc.Class({
                     this.v_vert_flag2 = true
                     callfunc(this,curnum,istouch)
                 }
-            }else if(this.v_vert_flag2 == false){
+            }else if(d == 1 && this.v_vert_flag2 == false){
                 // console.log("   ---------------------judge 下 ball_d_pid 不存在 搜索结束 开始回调" + "  judgeID "+judgeid)
                 this.v_vert_flag2 = true
                 callfunc(this,curnum,istouch)
@@ -291,8 +297,10 @@ cc.Class({
         if( l == 1 || r == 1){
             this.v_hori.push(pid)
             // console.log("   ---------------------judge 横+ "+this.v_hori.length + "  judgeID "+judgeid)
-            if(ball_l_pid != null){
-                if(l == 1 && this.ballsArray[ball_l_pid].comp.isAlive && this.touchCid == this.ballsArray[ball_l_pid].cid){
+            // console.log("#######  this.v_hori 数组")
+            // console.log(this.v_hori)
+            if(l == 1 && ball_l_pid != null){
+                if(this.ballsArray[ball_l_pid].comp.isAlive && this.touchCid == this.ballsArray[ball_l_pid].cid){
                     // console.log("   ---------------------judge 左 继续搜索" + "  judgeID "+judgeid)
                     this.judge(ball_l_pid,0,0,0,0,0,0,1,0,istouch,curnum,judgeid)
                 }else if(this.v_hori_flag1 == false){
@@ -300,14 +308,14 @@ cc.Class({
                     this.v_hori_flag1 = true
                     callfunc(this,curnum,istouch)
                 }
-            }else if(this.v_hori_flag1 == false){
+            }else if(l == 1 && this.v_hori_flag1 == false){
                 // console.log("   ---------------------judge 左 ball_l_pid 不存在 搜索结束 开始回调" + "  judgeID "+judgeid)
                 this.v_hori_flag1 = true
                 callfunc(this,curnum,istouch)
             }
 
-            if(ball_r_pid != null){
-                if(r == 1 && this.ballsArray[ball_r_pid].comp.isAlive && this.touchCid == this.ballsArray[ball_r_pid].cid){
+            if(r == 1 && ball_r_pid != null){
+                if(this.ballsArray[ball_r_pid].comp.isAlive && this.touchCid == this.ballsArray[ball_r_pid].cid){
                     // console.log("   ---------------------judge 右 继续搜索" + "  judgeID "+judgeid)
                     this.judge(ball_r_pid,0,0,1,0,0,0,0,0,istouch,curnum,judgeid)
                 }else if(this.v_hori_flag2 == false){
@@ -315,7 +323,7 @@ cc.Class({
                     this.v_hori_flag2 = true
                     callfunc(this,curnum,istouch)
                 }
-            }else if(this.v_hori_flag2 == false){
+            }else if(r == 1 && this.v_hori_flag2 == false){
                 // console.log("   ---------------------judge 右 ball_r_pid 不存在 搜索结束 开始回调" + "  judgeID "+judgeid)
                 this.v_hori_flag2 = true
                 callfunc(this,curnum,istouch)
@@ -324,8 +332,10 @@ cc.Class({
         if( ru == 1 || ld == 1){
             this.v_lFall.push(pid)
             // console.log("   ---------------------judge 撇+ "+this.v_lFall.length + "  judgeID "+judgeid)
-            if(ball_ru_pid != null){
-                if(ru == 1 && this.ballsArray[ball_ru_pid].comp.isAlive && this.touchCid == this.ballsArray[ball_ru_pid].cid){
+            // console.log("#######  this.v_lFall 数组")
+            // console.log(this.v_lFall)
+            if(ru == 1 && ball_ru_pid != null){
+                if(this.ballsArray[ball_ru_pid].comp.isAlive && this.touchCid == this.ballsArray[ball_ru_pid].cid){
                     // console.log("   ---------------------judge 右上 继续搜索" + "  judgeID "+judgeid)
                     this.judge(ball_ru_pid,0,1,0,0,0,0,0,0,istouch,curnum,judgeid)
                 }else if(this.v_lFall_flag1 == false){
@@ -333,14 +343,14 @@ cc.Class({
                     this.v_lFall_flag1 = true
                     callfunc(this,curnum,istouch)
                 }
-            }else if(this.v_lFall_flag1 == false){
+            }else if(ru == 1 && this.v_lFall_flag1 == false){
                 // console.log("   ---------------------judge 右上 ball_ru_pid 不存在 搜索结束 开始回调" + "  judgeID "+judgeid)
                 this.v_lFall_flag1 = true
                 callfunc(this,curnum,istouch)
             }
 
-            if(ball_ld_pid != null){
-                if(ld == 1 &&this.ballsArray[ball_ld_pid].comp.isAlive && this.touchCid == this.ballsArray[ball_ld_pid].cid){
+            if(ld == 1 &&ball_ld_pid != null){
+                if(this.ballsArray[ball_ld_pid].comp.isAlive && this.touchCid == this.ballsArray[ball_ld_pid].cid){
                     // console.log("   ---------------------judge 左下 继续搜索" + "  judgeID "+judgeid)
                     this.judge(ball_ld_pid,0,0,0,0,0,1,0,0,istouch,curnum,judgeid)
                 }else if(this.v_lFall_flag2 == false){
@@ -348,7 +358,7 @@ cc.Class({
                     this.v_lFall_flag2 = true
                     callfunc(this,curnum,istouch)
                 }
-            }else if(this.v_lFall_flag2 == false){
+            }else if(ld == 1 &&this.v_lFall_flag2 == false){
                 // console.log("   ---------------------judge 左下 ball_ld_pid 不存在 搜索结束 开始回调" + "  judgeID "+judgeid)
                 this.v_lFall_flag2 = true
                 callfunc(this,curnum,istouch)
@@ -357,8 +367,10 @@ cc.Class({
         if( lu == 1 || rd == 1){
             this.v_rFall.push(pid)
             // console.log("   ---------------------judge 捺+ "+this.v_rFall.length + "  judgeID "+judgeid)
-            if(ball_lu_pid != null){
-                if(lu == 1 && this.ballsArray[ball_lu_pid].comp.isAlive && this.touchCid == this.ballsArray[ball_lu_pid].cid){
+            // console.log("#######  this.v_rFall 数组")
+            // console.log(this.v_rFall)
+            if(lu == 1 && ball_lu_pid != null){
+                if( this.ballsArray[ball_lu_pid].comp.isAlive && this.touchCid == this.ballsArray[ball_lu_pid].cid){
                     // console.log("   ---------------------judge 左上 继续搜索" + "  judgeID "+judgeid)
                     this.judge(ball_lu_pid,0,0,0,0,0,0,0,1,istouch,curnum,judgeid)
                 }else if(this.v_rFall_flag1 == false){
@@ -366,14 +378,14 @@ cc.Class({
                     this.v_rFall_flag1 = true
                     callfunc(this,curnum,istouch)
                 }
-            }else if(this.v_rFall_flag1 == false){
+            }else if(lu == 1 && this.v_rFall_flag1 == false){
                 // console.log("   ---------------------judge 左上 ball_lu_pid 不存在 搜索结束 开始回调" + "  judgeID "+judgeid)
                 this.v_rFall_flag1 = true
                 callfunc(this,curnum,istouch)
             }
 
-            if(ball_rd_pid != null){
-                if(rd == 1 && this.ballsArray[ball_rd_pid].comp.isAlive && this.touchCid == this.ballsArray[ball_rd_pid].cid){
+            if(rd == 1 && ball_rd_pid != null){
+                if( this.ballsArray[ball_rd_pid].comp.isAlive && this.touchCid == this.ballsArray[ball_rd_pid].cid){
                     // console.log("   ---------------------judge 右下 继续搜索" + "  judgeID "+judgeid)
                     this.judge(ball_rd_pid,0,0,0,1,0,0,0,0,istouch,curnum,judgeid)
                 }else if(this.v_rFall_flag2 == false){
@@ -381,7 +393,7 @@ cc.Class({
                     this.v_rFall_flag2 = true
                     callfunc(this,curnum,istouch)
                 }
-            }else if(this.v_rFall_flag2 == false){
+            }else if(rd == 1 && this.v_rFall_flag2 == false){
                 // console.log("   ---------------------judge 右下 ball_rd_pid 不存在 搜索结束 开始回调" + "  judgeID "+judgeid)
                 this.v_rFall_flag2 = true
                 callfunc(this,curnum,istouch)

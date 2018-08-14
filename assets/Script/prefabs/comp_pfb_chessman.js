@@ -34,6 +34,7 @@ cc.Class({
         this.cur_Id = null
         this.isAlive = false
         this.lb.string = ""
+        // this.lb.string = pid
         this.setcolor()
     },
 

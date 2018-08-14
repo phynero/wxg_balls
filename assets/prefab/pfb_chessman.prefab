@@ -962,7 +962,7 @@
     "target": {
       "__id__": 1
     },
-    "component": "pfb_chessman",
+    "component": "comp_pfb_chessman",
     "handler": "onClick",
     "customEventData": ""
   },

@@ -1557,7 +1557,7 @@
     "target": {
       "__id__": 2
     },
-    "component": "mainscene",
+    "component": "comp_scene_main",
     "handler": "onRegame",
     "customEventData": ""
   },

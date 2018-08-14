@@ -265,7 +265,7 @@
     "relativePath": "resources/i18n"
   },
   "29f52784-2fca-467b-92e7-8fd9ef8c57b7": {
-    "asset": 1534214059259,
+    "asset": 1534221390207,
     "meta": 1534213371256,
     "relativePath": "Scene"
   },
@@ -275,7 +275,7 @@
     "relativePath": "Script"
   },
   "7b81d4e8-ec84-4716-968d-500ac1d78a54": {
-    "asset": 1534213901044,
+    "asset": 1534219580287,
     "meta": 1534213371257,
     "relativePath": "Texture"
   },
@@ -285,18 +285,18 @@
     "relativePath": "prefab"
   },
   "b150ac9f-7a78-4345-94d6-1603c6302bb1": {
-    "asset": 1534215895323,
-    "meta": 1534215895332,
+    "asset": 1534219936131,
+    "meta": 1534219936139,
     "relativePath": "prefab/pfb_chessman.prefab"
   },
   "a4d33f7f-fae6-4cc6-bc69-4cdeebecc9cd": {
-    "asset": 1534215834874,
-    "meta": 1534215834896,
-    "relativePath": "Scene/main.fire"
+    "asset": 1534231794393,
+    "meta": 1534231794407,
+    "relativePath": "Scene/maingame.fire"
   },
   "20094b13-621a-4974-acbc-8624678b8b79": {
-    "asset": 1534210515509,
-    "meta": 1534213901087,
+    "asset": 1534231948051,
+    "meta": 1534231948060,
     "relativePath": "Scene/splash.fire"
   },
   "8d2d3d86-b517-439f-a633-b99aedd55877": {
@@ -308,21 +308,6 @@
     "asset": 1534213901033,
     "meta": 1534213901032,
     "relativePath": "Script/scenes"
-  },
-  "fac07b66-6bf7-4393-bef0-e7af92322535": {
-    "asset": 1534177959552,
-    "meta": 1534213902085,
-    "relativePath": "Script/prefabs/comp_pfb_chessman.js"
-  },
-  "0719ae46-d34d-4573-ad77-f980b87bd206": {
-    "asset": 1534178022890,
-    "meta": 1534213902102,
-    "relativePath": "Script/scenes/comp_scene_main.js"
-  },
-  "79c9516e-3e5b-4a52-ae90-89c90eda2d3a": {
-    "asset": 1534210435942,
-    "meta": 1534213902103,
-    "relativePath": "Script/scenes/comp_scene_splash.js"
   },
   "c99e7f91-1556-4ec2-9156-651f53740fc8": {
     "asset": 1533785784559,
@@ -343,5 +328,30 @@
     "asset": 1532341844966,
     "meta": 1534213902261,
     "relativePath": "Texture/bg.png"
+  },
+  "841b7975-1feb-4928-a297-9ecea7702658": {
+    "asset": 1532601312256,
+    "meta": 1534219580500,
+    "relativePath": "Texture/bg_res.plist"
+  },
+  "523615fd-cec9-4563-8fe4-2e09b42bbe97": {
+    "asset": 1532601312239,
+    "meta": 1534219580494,
+    "relativePath": "Texture/bg_res.png"
+  },
+  "fac07b66-6bf7-4393-bef0-e7af92322535": {
+    "asset": 1534231358109,
+    "meta": 1534231359761,
+    "relativePath": "Script/prefabs/comp_pfb_chessman.js"
+  },
+  "0719ae46-d34d-4573-ad77-f980b87bd206": {
+    "asset": 1534231424350,
+    "meta": 1534231425733,
+    "relativePath": "Script/scenes/comp_scene_main.js"
+  },
+  "79c9516e-3e5b-4a52-ae90-89c90eda2d3a": {
+    "asset": 1534232621734,
+    "meta": 1534232625168,
+    "relativePath": "Script/scenes/comp_scene_splash.js"
   }
 }
