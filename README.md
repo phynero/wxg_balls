@@ -1,1 +1,2 @@
-# wxg_balls
+# hello-world
+Hello world new project template.
