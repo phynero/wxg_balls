@@ -1,5 +1,5 @@
 
-var TOTALCOLORS = 6
+var TOTALCOLORS = 4
 var TOTALCOUNTS = 2
 cc.Class({
     extends: cc.Component,
@@ -41,6 +41,8 @@ cc.Class({
         v_hori_flag2 : null,
         v_lFall_flag2 : null,
         v_rFall_flag2 : null,
+
+        canTouch : null,
     },
 
     onLoad: function () {
@@ -51,9 +53,11 @@ cc.Class({
         this.v_lFall = []
         this.v_rFall = []
         this.curScore = 0
+        this.canTouch = true
         this.initboard()
     },
     clearjudgecache(){
+        // console.log("清理judge 缓存")
         this.v_vert.splice(0,this.v_vert.length)
         this.v_hori.splice(0,this.v_hori.length)
         this.v_lFall.splice(0,this.v_lFall.length)
@@ -71,7 +75,13 @@ cc.Class({
         this.initballs()
         this.clearjudgecache()
         this.randball()
-        this.setRandomBalls()
+        var temparray = []
+        for (let index = 0; index < this.ballsArray.length; index++) {
+            if(this.ballsArray[index].comp.getstate() == false){
+                temparray.push(this.ballsArray[index].pid)
+            }
+        }
+        this.setRandomBalls(1,temparray)
     },
 
     initboard(){
@@ -108,50 +118,37 @@ cc.Class({
         }
     },
 
-    setRandomBalls(){
+    setRandomBalls(num,temparray){
         // console.log("------> setRandomBalls()")
-        var temparray = []
-        var outputarray = []
-        for (let index = 0; index < this.ballsArray.length; index++) {
-            if(this.ballsArray[index].comp.getstate() == false){
-                temparray.push(this.ballsArray[index].pid)
-            }
-        }
-        if(temparray.length <= TOTALCOUNTS){
-            this.gameover()
+        if(num > 2){
+            this.canTouch = true
             return
         }
-        while (outputarray.length < TOTALCOUNTS) {
-            // console.log(outputarray)
-            let templength = temparray.length
-            let tpid = Math.round(Math.random()*templength)
-            tpid = tpid == templength ? 0 : tpid  //保证概率相同
-            let pid = temparray[tpid]
-            let flag = false
-            for (let index = 0; index < outputarray.length; index++) {
-                if(pid == outputarray[index]){
-                    flag = true
-                }
-            }
-            if(flag == false){
-                outputarray.push(pid)
-                var cid = Math.round(Math.random()*TOTALCOLORS)
-                cid = cid == TOTALCOLORS ? 0 : cid   //保证概率相同
-    
-                this.ballsArray[pid].comp.setCid(cid)
-                this.ballsArray[pid].cid = cid
-                this.touchCid = cid
-                this.clearjudgecache()
-                this.judge(pid,1,1,1,1,1,1,1,1,false)
-            }
-        }
+        var outputarray = []
 
+        let templength = temparray.length
+        let tpid = Math.round(Math.random()*templength)
+        tpid = tpid == templength ? 0 : tpid  //保证概率相同
+        let pid = temparray[tpid]
+        
+        outputarray.push(pid)
+
+        // console.log("")
+        // console.log("随机 "+num + "   pid"+pid)
+        var cid = Math.round(Math.random()*TOTALCOLORS)
+        cid = cid == TOTALCOLORS ? 0 : cid   //保证概率相同
+
+        this.ballsArray[pid].comp.setCid(cid)
+        this.ballsArray[pid].cid = cid
+        this.touchCid = cid
+        this.clearjudgecache()
+        this.judge(pid,1,1,1,1,1,1,1,1,false,num,0)
     },
 
     randball(){
         this.randballCid = Math.round(Math.random()*TOTALCOLORS)
         this.randballCid = this.randballCid == TOTALCOLORS ? 0 : this.randballCid   //保证概率相同
-        // console.log(" random ball cid " + this.randballCid)
+        // console.log(" random ball    cid " + this.randballCid + "    0红 1橙")
         this.ball1.active = this.randballCid == 0
         this.ball2.active = this.randballCid == 1
         this.ball3.active = this.randballCid == 2
@@ -163,20 +160,30 @@ cc.Class({
     },
 
     onChessPut(pid){
+        // console.log("")
+        // console.log("")
+        // console.log("")
+        // console.log("落子")
+        if(this.canTouch == false){return}
+        this.canTouch = false
+
         this.ballsArray[pid].comp.setCid(this.randballCid)
         this.ballsArray[pid].cid = this.randballCid
         this.touchCid = this.randballCid
+        // console.log("##### 手动设置 pid "+pid + "  cid "+this.randballCid)
         this.randball()
         this.clearjudgecache()
-        this.judge(pid,1,1,1,1,1,1,1,1,true)
-        // this.setRandomBalls()
+        this.judge(pid,1,1,1,1,1,1,1,1,true,0,0)
     },
 
     /* 
     1
     0 10
     */
-    judge(pid,u,ru,r,rd,d,ld,l,lu,istouch){
+    judge(pid,u,ru,r,rd,d,ld,l,lu,istouch,curnum,judgeid){
+        judgeid += 1
+        // console.log(" 进入judge()  第几次curnum "+curnum + "  judgeID "+judgeid)
+        // this.canRand = false
         let ball_u_pid = (pid % 10 == 9) ? null : pid + 1
         let ball_ru_pid = (pid % 10 == 9 || pid >= 90) ? null : pid + 11
         let ball_r_pid = (pid >= 90) ? null : pid + 10
@@ -186,12 +193,14 @@ cc.Class({
         let ball_l_pid = (pid < 10) ? null : pid - 10
         let ball_lu_pid = (pid % 10 == 9 || pid < 10) ? null : pid - 9
 
-        var callfunc = function(self,istouch_){
+        var callfunc = function(self,curnum_,istouch_){
+            // console.log(" judge() 的 callfunc curnum_ "+curnum_ + "  judgeID "+judgeid)
             if( self.v_vert_flag1 && self.v_vert_flag2 
                 && self.v_hori_flag1 && self.v_hori_flag2 
                 && self.v_lFall_flag1 && self.v_lFall_flag2 
-                && self.v_rFall_flag1 && self.v_rFall_flag2 
+                && self.v_rFall_flag1 && self.v_rFall_flag2
             ){
+                // console.log(" callfunc ==================== 达标 没有能搜索的连续!!!" + "  judgeID "+judgeid)
                 var arrangefunc = function(self2,datain){
                     let tempobj = {}
                     for (let index = 0; index < datain.length; index++) {
@@ -208,139 +217,182 @@ cc.Class({
                             self2.ballsCleanArray.push(key)
                         }
                     }
-                    self.clearchesses()
+                    // console.log("   ----------------------------------   回调 self2.ballsCleanArray" + "  judgeID "+judgeid)
+                    // console.log(self2.ballsCleanArray)
+                    self2.clearchesses(curnum_+1,istouch_)
                 }
                 self.ballsCleanArray.splice(0,self.ballsCleanArray.length)
                 if(self.v_vert.length >= 5){
+                    // console.log("   --------------------------   竖超过5个 "+self.v_vert.length + "  judgeID "+judgeid)
                     arrangefunc(self,self.v_vert)
                 }
                 if(self.v_hori.length >= 5){
+                    // console.log("   --------------------------   横超过5个 "+self.v_hori.length + "  judgeID "+judgeid)
                     arrangefunc(self,self.v_hori)
                 }
                 if(self.v_lFall.length >= 5){
+                    // console.log("   --------------------------   捺超过5个 "+self.v_lFall.length + "  judgeID "+judgeid)
                     arrangefunc(self,self.v_lFall)
                 }
                 if(self.v_rFall.length >= 5){
+                    // console.log("   --------------------------   撇超过5个 "+self.v_rFall.length + "  judgeID "+judgeid)
                     arrangefunc(self,self.v_rFall)
                 }
-                if(istouch_ && self.v_vert.length < 5 && self.v_hori.length < 5 && self.v_lFall.length < 5 && self.v_rFall.length < 5 ){
-                    self.setRandomBalls()
+                if(self.v_vert.length < 5 && self.v_hori.length < 5 && self.v_lFall.length < 5 && self.v_rFall.length < 5 ){
+                    // console.log(" ----------------------------->    没有可消除 curnum_ "+curnum_ + "  judgeID "+judgeid)
+                    // console.log(" istouch_  ----->  "+istouch_ + "  judgeID "+judgeid)
+                    var temparray = []
+                    for (let index = 0; index < self.ballsArray.length; index++) {
+                        if(self.ballsArray[index].comp.getstate() == false){
+                            temparray.push(self.ballsArray[index].pid)
+                        }
+                    }
+                    if(temparray.length == 0){
+                        self.gameover()
+                        return
+                    }
+                    self.setRandomBalls(curnum_+1,temparray)
                 }
             }
         }
         if( u == 1 || d == 1){
-            // console.log("   ---------------------judge 竖")
             this.v_vert.push(pid)
+            // console.log("   ---------------------judge 竖+ "+this.v_vert.length + "  judgeID "+judgeid)
             if(ball_u_pid != null){
                 if(u == 1 && this.ballsArray[ball_u_pid].comp.isAlive && this.touchCid == this.ballsArray[ball_u_pid].cid){
-                    this.judge(ball_u_pid,1,0,0,0,0,0,0,0,istouch)
-                }else{
+                    // console.log("   ---------------------judge 上 继续搜索" + "  judgeID "+judgeid)
+                    this.judge(ball_u_pid,1,0,0,0,0,0,0,0,istouch,curnum,judgeid)
+                }else if(this.v_vert_flag1 == false){
+                    // console.log("   ---------------------judge 上 搜索结束 开始回调" + "  judgeID "+judgeid)
                     this.v_vert_flag1 = true
-                    callfunc(this,istouch)
+                    callfunc(this,curnum,istouch)
                 }
-            }else{
+            }else if(this.v_vert_flag1 == false){
+                // console.log("   ---------------------judge 上 ball_u_pid 不存在 搜索结束 开始回调" + "  judgeID "+judgeid)
                 this.v_vert_flag1 = true
-                callfunc(this,istouch)
+                callfunc(this,curnum,istouch)
             }
 
             if(ball_d_pid != null){
                 if(d == 1 && this.ballsArray[ball_d_pid].comp.isAlive && this.touchCid == this.ballsArray[ball_d_pid].cid){
-                    this.judge(ball_d_pid,0,0,0,0,1,0,0,0,istouch)
-                }else{
+                    // console.log("   ---------------------judge 下 继续搜索" + "  judgeID "+judgeid)
+                    this.judge(ball_d_pid,0,0,0,0,1,0,0,0,istouch,curnum,judgeid)
+                }else if(this.v_vert_flag2 == false){
+                    // console.log("   ---------------------judge 下 搜索结束 开始回调" + "  judgeID "+judgeid)
                     this.v_vert_flag2 = true
-                    callfunc(this,istouch)
+                    callfunc(this,curnum,istouch)
                 }
-            }else{
+            }else if(this.v_vert_flag2 == false){
+                // console.log("   ---------------------judge 下 ball_d_pid 不存在 搜索结束 开始回调" + "  judgeID "+judgeid)
                 this.v_vert_flag2 = true
-                callfunc(this,istouch)
+                callfunc(this,curnum,istouch)
             }
         }
         if( l == 1 || r == 1){
-            // console.log("   ---------------------judge 横")
             this.v_hori.push(pid)
+            // console.log("   ---------------------judge 横+ "+this.v_hori.length + "  judgeID "+judgeid)
             if(ball_l_pid != null){
                 if(l == 1 && this.ballsArray[ball_l_pid].comp.isAlive && this.touchCid == this.ballsArray[ball_l_pid].cid){
-                    this.judge(ball_l_pid,0,0,0,0,0,0,1,0,istouch)
-                }else{
+                    // console.log("   ---------------------judge 左 继续搜索" + "  judgeID "+judgeid)
+                    this.judge(ball_l_pid,0,0,0,0,0,0,1,0,istouch,curnum,judgeid)
+                }else if(this.v_hori_flag1 == false){
+                    // console.log("   ---------------------judge 左 搜索结束 开始回调" + "  judgeID "+judgeid)
                     this.v_hori_flag1 = true
-                    callfunc(this,istouch)
+                    callfunc(this,curnum,istouch)
                 }
-            }else{
+            }else if(this.v_hori_flag1 == false){
+                // console.log("   ---------------------judge 左 ball_l_pid 不存在 搜索结束 开始回调" + "  judgeID "+judgeid)
                 this.v_hori_flag1 = true
-                callfunc(this,istouch)
+                callfunc(this,curnum,istouch)
             }
 
             if(ball_r_pid != null){
                 if(r == 1 && this.ballsArray[ball_r_pid].comp.isAlive && this.touchCid == this.ballsArray[ball_r_pid].cid){
-                    this.judge(ball_r_pid,0,0,1,0,0,0,0,0,istouch)
-                }else{
+                    // console.log("   ---------------------judge 右 继续搜索" + "  judgeID "+judgeid)
+                    this.judge(ball_r_pid,0,0,1,0,0,0,0,0,istouch,curnum,judgeid)
+                }else if(this.v_hori_flag2 == false){
+                    // console.log("   ---------------------judge 右 搜索结束 开始回调" + "  judgeID "+judgeid)
                     this.v_hori_flag2 = true
-                    callfunc(this,istouch)
+                    callfunc(this,curnum,istouch)
                 }
-            }else{
+            }else if(this.v_hori_flag2 == false){
+                // console.log("   ---------------------judge 右 ball_r_pid 不存在 搜索结束 开始回调" + "  judgeID "+judgeid)
                 this.v_hori_flag2 = true
-                callfunc(this,istouch)
-            }
-        }
-        if( lu == 1 || rd == 1){
-            // console.log("   ---------------------judge 捺")
-            this.v_rFall.push(pid)
-            if(ball_lu_pid != null){
-                if(lu == 1 && this.ballsArray[ball_lu_pid].comp.isAlive && this.touchCid == this.ballsArray[ball_lu_pid].cid){
-                    this.judge(ball_lu_pid,0,0,0,0,0,0,0,1,istouch)
-                }else{
-                    this.v_rFall_flag1 = true
-                    callfunc(this,istouch)
-                }
-            }else{
-                this.v_rFall_flag1 = true
-                callfunc(this,istouch)
-            }
-
-            if(ball_rd_pid != null){
-                if(rd == 1 && this.ballsArray[ball_rd_pid].comp.isAlive && this.touchCid == this.ballsArray[ball_rd_pid].cid){
-                    this.judge(ball_rd_pid,0,0,0,1,0,0,0,0,istouch)
-                }else{
-                    this.v_rFall_flag2 = true
-                    callfunc(this,istouch)
-                }
-            }else{
-                this.v_rFall_flag2 = true
-                callfunc(this,istouch)
+                callfunc(this,curnum,istouch)
             }
         }
         if( ru == 1 || ld == 1){
-            // console.log("   ---------------------judge 撇")
             this.v_lFall.push(pid)
+            // console.log("   ---------------------judge 撇+ "+this.v_lFall.length + "  judgeID "+judgeid)
             if(ball_ru_pid != null){
                 if(ru == 1 && this.ballsArray[ball_ru_pid].comp.isAlive && this.touchCid == this.ballsArray[ball_ru_pid].cid){
-                    this.judge(ball_ru_pid,0,1,0,0,0,0,0,0,istouch)
-                }else{
+                    // console.log("   ---------------------judge 右上 继续搜索" + "  judgeID "+judgeid)
+                    this.judge(ball_ru_pid,0,1,0,0,0,0,0,0,istouch,curnum,judgeid)
+                }else if(this.v_lFall_flag1 == false){
+                    // console.log("   ---------------------judge 右上 搜索结束 开始回调" + "  judgeID "+judgeid)
                     this.v_lFall_flag1 = true
-                    callfunc(this,istouch)
+                    callfunc(this,curnum,istouch)
                 }
-            }else{
+            }else if(this.v_lFall_flag1 == false){
+                // console.log("   ---------------------judge 右上 ball_ru_pid 不存在 搜索结束 开始回调" + "  judgeID "+judgeid)
                 this.v_lFall_flag1 = true
-                callfunc(this,istouch)
+                callfunc(this,curnum,istouch)
             }
 
             if(ball_ld_pid != null){
                 if(ld == 1 &&this.ballsArray[ball_ld_pid].comp.isAlive && this.touchCid == this.ballsArray[ball_ld_pid].cid){
-                    this.judge(ball_ld_pid,0,0,0,0,0,1,0,0,istouch)
-                }else{
+                    // console.log("   ---------------------judge 左下 继续搜索" + "  judgeID "+judgeid)
+                    this.judge(ball_ld_pid,0,0,0,0,0,1,0,0,istouch,curnum,judgeid)
+                }else if(this.v_lFall_flag2 == false){
+                    // console.log("   ---------------------judge 左下 搜索结束 开始回调" + "  judgeID "+judgeid)
                     this.v_lFall_flag2 = true
-                    callfunc(this,istouch)
+                    callfunc(this,curnum,istouch)
                 }
-            }else{
+            }else if(this.v_lFall_flag2 == false){
+                // console.log("   ---------------------judge 左下 ball_ld_pid 不存在 搜索结束 开始回调" + "  judgeID "+judgeid)
                 this.v_lFall_flag2 = true
-                callfunc(this,istouch)
+                callfunc(this,curnum,istouch)
+            }
+        }
+        if( lu == 1 || rd == 1){
+            this.v_rFall.push(pid)
+            // console.log("   ---------------------judge 捺+ "+this.v_rFall.length + "  judgeID "+judgeid)
+            if(ball_lu_pid != null){
+                if(lu == 1 && this.ballsArray[ball_lu_pid].comp.isAlive && this.touchCid == this.ballsArray[ball_lu_pid].cid){
+                    // console.log("   ---------------------judge 左上 继续搜索" + "  judgeID "+judgeid)
+                    this.judge(ball_lu_pid,0,0,0,0,0,0,0,1,istouch,curnum,judgeid)
+                }else if(this.v_rFall_flag1 == false){
+                    // console.log("   ---------------------judge 左上 搜索结束 开始回调" + "  judgeID "+judgeid)
+                    this.v_rFall_flag1 = true
+                    callfunc(this,curnum,istouch)
+                }
+            }else if(this.v_rFall_flag1 == false){
+                // console.log("   ---------------------judge 左上 ball_lu_pid 不存在 搜索结束 开始回调" + "  judgeID "+judgeid)
+                this.v_rFall_flag1 = true
+                callfunc(this,curnum,istouch)
+            }
+
+            if(ball_rd_pid != null){
+                if(rd == 1 && this.ballsArray[ball_rd_pid].comp.isAlive && this.touchCid == this.ballsArray[ball_rd_pid].cid){
+                    // console.log("   ---------------------judge 右下 继续搜索" + "  judgeID "+judgeid)
+                    this.judge(ball_rd_pid,0,0,0,1,0,0,0,0,istouch,curnum,judgeid)
+                }else if(this.v_rFall_flag2 == false){
+                    // console.log("   ---------------------judge 右下 搜索结束 开始回调" + "  judgeID "+judgeid)
+                    this.v_rFall_flag2 = true
+                    callfunc(this,curnum,istouch)
+                }
+            }else if(this.v_rFall_flag2 == false){
+                // console.log("   ---------------------judge 右下 ball_rd_pid 不存在 搜索结束 开始回调" + "  judgeID "+judgeid)
+                this.v_rFall_flag2 = true
+                callfunc(this,curnum,istouch)
             }
         }
     },
 
     // 消除
-    clearchesses(){
-        // console.log("#####    clearchesses()")
+    clearchesses(curnum,istouch){
+        // console.log("#####    clearchesses()  istouch "+istouch)
+        // this.canRand = true
         // console.log(this.ballsCleanArray)
         for (let index = 0;  index < this.ballsCleanArray.length; index++) {
             this.ballsArray[this.ballsCleanArray[index]].cid = null
@@ -348,6 +400,18 @@ cc.Class({
         }
         this.curScore += this.ballsCleanArray.length
         this.lb_curScore.string = this.curScore
+        if(istouch == false){
+            // console.log("            @@@@@@@@@@  clearchesses 自动消除的  curnum "+curnum)
+            var temparray = []
+            for (let index = 0; index < this.ballsArray.length; index++) {
+                if(this.ballsArray[index].comp.getstate() == false){
+                    temparray.push(this.ballsArray[index].pid)
+                }
+            }
+            this.setRandomBalls(curnum+1,temparray)
+        }else{
+            this.canTouch = true
+        }
     },
 
     clearAll(){
@@ -355,11 +419,18 @@ cc.Class({
             this.ballsArray[i].cid = null
             this.ballsArray[i].comp.removed()
         }
-
-        this.lb_curScore.string = "0"
+        this.curScore = 0
+        this.lb_curScore.string = this.curScore
         this.clearjudgecache()
-        this.randball()
-        this.setRandomBalls()
+        // this.randball()
+
+        var temparray = []
+        for (let index = 0; index < this.ballsArray.length; index++) {
+            if(this.ballsArray[index].comp.getstate() == false){
+                temparray.push(this.ballsArray[index].pid)
+            }
+        }
+        this.setRandomBalls(1,temparray)
     },
 
     gameover(){

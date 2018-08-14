@@ -10,6 +10,7 @@ cc.Class({
         p6 : cc.Node,
         p7 : cc.Node,
         p8 : cc.Node,
+        lb : cc.Label,
 
         cur_Id : null,
         pos_Id : null,
@@ -32,6 +33,7 @@ cc.Class({
         this.context = context
         this.cur_Id = null
         this.isAlive = false
+        this.lb.string = ""
         this.setcolor()
     },
 

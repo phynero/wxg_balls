@@ -55,12 +55,12 @@
     "relativePath": "Scene"
   },
   "4734c20c-0db8-4eb2-92ea-e692f4d70934": {
-    "asset": 1533659340087,
+    "asset": 1533788171728,
     "meta": 1533630101942,
     "relativePath": "Script"
   },
   "7b81d4e8-ec84-4716-968d-500ac1d78a54": {
-    "asset": 1533637876422,
+    "asset": 1533785798689,
     "meta": 1533630101942,
     "relativePath": "Texture"
   },
@@ -90,39 +90,9 @@
     "relativePath": "prefab"
   },
   "649029c6-8995-439b-8274-8365e3c4a43d": {
-    "asset": 1533785881170,
-    "meta": 1533785881186,
+    "asset": 1534174647175,
+    "meta": 1534174647188,
     "relativePath": "prefab/pfb_chessman.prefab"
-  },
-  "8c5001fd-07ee-4a4b-a8a0-63e15195e94d": {
-    "asset": 1527580127000,
-    "meta": 1533779213713,
-    "relativePath": "prefab/webview.prefab"
-  },
-  "61de0eb6-9f87-49ed-933d-fd776e9a8ce7": {
-    "asset": 1519816086000,
-    "meta": 1533779213452,
-    "relativePath": "LanguageData.js"
-  },
-  "744dcb38-0c27-4da6-b361-1b4c70aba14a": {
-    "asset": 1519816086000,
-    "meta": 1533779213480,
-    "relativePath": "LocalizedLabel.js"
-  },
-  "f34acd86-1a25-4e05-b1ba-5e57ef8183f8": {
-    "asset": 1519816086000,
-    "meta": 1533779213586,
-    "relativePath": "LocalizedSprite.js"
-  },
-  "e26fdf72-cbae-40e2-adff-264a559c5620": {
-    "asset": 1519816086000,
-    "meta": 1533779213595,
-    "relativePath": "polyglot.min.js"
-  },
-  "9701943c-d23a-44d9-87f3-e336ee09906a": {
-    "asset": 1519816086000,
-    "meta": 1533779213600,
-    "relativePath": "SpriteFrameSet.js"
   },
   "e851e89b-faa2-4484-bea6-5c01dd9f06e2": {
     "asset": 1527580127000,
@@ -314,14 +284,44 @@
     "meta": 1533785804077,
     "relativePath": "Texture/balls_res.png"
   },
-  "3f199fb4-505f-4c7c-b17b-5400c8aeeca8": {
-    "asset": 1533785994133,
-    "meta": 1533786012340,
-    "relativePath": "Script/pfb_chessman.js"
+  "61de0eb6-9f87-49ed-933d-fd776e9a8ce7": {
+    "asset": 1519816086000,
+    "meta": 1534167353364,
+    "relativePath": "LanguageData.js"
+  },
+  "8c5001fd-07ee-4a4b-a8a0-63e15195e94d": {
+    "asset": 1527580127000,
+    "meta": 1534167353670,
+    "relativePath": "prefab/webview.prefab"
+  },
+  "744dcb38-0c27-4da6-b361-1b4c70aba14a": {
+    "asset": 1519816086000,
+    "meta": 1534167353418,
+    "relativePath": "LocalizedLabel.js"
+  },
+  "f34acd86-1a25-4e05-b1ba-5e57ef8183f8": {
+    "asset": 1519816086000,
+    "meta": 1534167353518,
+    "relativePath": "LocalizedSprite.js"
+  },
+  "e26fdf72-cbae-40e2-adff-264a559c5620": {
+    "asset": 1519816086000,
+    "meta": 1534167353526,
+    "relativePath": "polyglot.min.js"
+  },
+  "9701943c-d23a-44d9-87f3-e336ee09906a": {
+    "asset": 1519816086000,
+    "meta": 1534167353531,
+    "relativePath": "SpriteFrameSet.js"
   },
   "280c3aec-6492-4a9d-9f51-a9b00b570b4a": {
-    "asset": 1533788895812,
-    "meta": 1533788897525,
+    "asset": 1534178022890,
+    "meta": 1534178024941,
     "relativePath": "Script/mainscene.js"
+  },
+  "3f199fb4-505f-4c7c-b17b-5400c8aeeca8": {
+    "asset": 1534177959552,
+    "meta": 1534178024943,
+    "relativePath": "Script/pfb_chessman.js"
   }
 }
