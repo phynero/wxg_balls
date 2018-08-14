@@ -21,7 +21,7 @@
     "_active": true,
     "_components": [],
     "_prefab": null,
-    "_id": "20094b13-621a-4974-acbc-8624678b8b79",
+    "_id": "41601d71-8dcf-40d0-9d14-7111604aa63c",
     "_opacity": 255,
     "_color": {
       "__type__": "cc.Color",
@@ -203,7 +203,7 @@
     "_fitHeight": false
   },
   {
-    "__type__": "79c95FuPltKUq6QickO2i06",
+    "__type__": "52b15+tcjhAd5DSdHGf0xRw",
     "_name": "",
     "_objFlags": 0,
     "node": {

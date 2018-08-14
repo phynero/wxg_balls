@@ -5,7 +5,7 @@
       "main": true,
       "url": "app://editor/index.html",
       "windowType": "dockable",
-      "x": 1974,
+      "x": 1966,
       "y": -45,
       "width": 1386,
       "height": 1052,
@@ -105,8 +105,8 @@
   },
   "panels": {
     "store": {
-      "x": 55,
-      "y": 23,
+      "x": 1457,
+      "y": 49,
       "width": 1121,
       "height": 877
     },
@@ -121,6 +121,18 @@
       "y": 372,
       "width": 564,
       "height": 548
+    },
+    "plugin-matchvs": {
+      "x": 560,
+      "y": 272,
+      "width": 804,
+      "height": 538
+    },
+    "clean": {
+      "x": 1494,
+      "y": 240,
+      "width": 500,
+      "height": 322
     }
   }
 }
