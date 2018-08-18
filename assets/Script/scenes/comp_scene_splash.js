@@ -1,3 +1,9 @@
+// appid
+// wxa13bad66882314ba
+// appkey
+// ad3b1e33a767643835a052018ac1efdc
+var g_data = require("globalData")
+var n_data = require("nativeData")
 var self = null
 cc.Class({
     extends: cc.Component,
@@ -11,18 +17,19 @@ cc.Class({
     },
 
     start () {
+
         this.getAuthSetting()
     },
 
     getAuthSetting(){
-        console.log("===== splash getAuthSetting()")
+        // console.log("===== splash getAuthSetting()")
         wx.getSetting({
             success: function(res){
                 if (res.authSetting['scope.userInfo']) {
-                    console.log("res.authSetting userInfo ok")
+                    // console.log("res.authSetting userInfo ok")
                     self.getUserInfo()
                 }else{
-                    console.log("res.authSetting userInfo not")
+                    // console.log("res.authSetting userInfo not")
                     wx.authorize({
                         scope: 'scope.userInfo',
                         success() {
@@ -40,7 +47,7 @@ cc.Class({
         })
     },
     getUserInfo(){
-        console.log("===== splash getUserInfo()")
+        // console.log("===== splash getUserInfo()")
         self.userInfo = {}
         wx.getUserInfo({
             success: function(res) {
@@ -56,7 +63,7 @@ cc.Class({
         })
     },
     getSystemInfo(){
-        console.log("===== splash getSystemInfo()")
+        // console.log("===== splash getSystemInfo()")
         wx.getSystemInfo({
             success: function(res) {
                 self.userInfo.platform = res.platform
@@ -73,13 +80,13 @@ cc.Class({
         })
     },
     getWxcode(){
-        console.log("===== splash getWxcode()")
+        // console.log("===== splash getWxcode()")
         wx.login({
             success: function(wxres) {
                 if (wxres.code) {
-                    console.log("  ========= "+wxres.code)
+                    // console.log("  ========= "+wxres.code)
                 }else{
-                console.log('微信登录失败！' + wxres.errMsg)
+                // console.log('微信登录失败！' + wxres.errMsg)
                 }
 
                 cc.director.loadScene("maingame")
