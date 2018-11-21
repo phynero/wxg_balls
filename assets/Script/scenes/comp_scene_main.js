@@ -21,7 +21,9 @@ cc.Class({
         ball6 : cc.Node,
         ball7 : cc.Node,
         ball8 : cc.Node,
-
+        s_display: cc.Sprite,
+        n_opendata: cc.Node,
+        n_opendata2: cc.Node,
         curScore : null,
 
         ballsArray : null,
@@ -44,8 +46,7 @@ cc.Class({
 
         canTouch : null,
     },
-
-    onLoad: function () {
+    onLoad(){
         this.ballsArray = []
         this.ballsCleanArray = []
         this.v_vert = []
@@ -54,6 +55,8 @@ cc.Class({
         this.v_rFall = []
         this.curScore = 0
         this.canTouch = true
+        this.n_opendata.active = false
+        this.n_opendata2.active = false 
         this.initboard()
     },
     clearjudgecache(){
@@ -72,6 +75,24 @@ cc.Class({
         this.v_rFall_flag2 = false
     },
     start(){
+        wx.showShareMenu({
+            withShareTicket: true
+        })
+        wx.onShareAppMessage(function () {
+            return {
+                title: '你能超越我吗?!',
+                // imageUrl: ""
+                imageUrl: canvas.toTempFilePathSync({
+                    x: 0,
+                    y: 500,
+                    width: cc.winSize.width,
+                    height: cc.winSize.height,
+                    destWidth: cc.winSize.width,
+                    destHeight: cc.winSize.height
+                })
+            }
+        })
+        this.tex = new cc.Texture2D();
         this.initballs()
         this.clearjudgecache()
         this.randball()
@@ -88,16 +109,16 @@ cc.Class({
         for (let index = 0; index < 11; index++) {
             let ctx_row = this.board.getComponent(cc.Graphics); // 行
             ctx_row.lineWidth = 2
-            ctx_row.strokeColor = cc.hexToColor('#555555');
-            ctx_row.fillColor = cc.hexToColor('#ffde59');
+            // ctx_row.strokeColor = cc.Color(85,85,85,255);
+            ctx_row.fillColor = cc.Color(85,85,85,255);
             ctx_row.moveTo(0,index*60)
             ctx_row.lineTo(600,index*60)
             ctx_row.stroke()
 
             let ctx_col = this.board.getComponent(cc.Graphics); // 列  
             ctx_col.lineWidth = 2
-            ctx_col.strokeColor = cc.hexToColor('#555555');
-            ctx_col.fillColor = cc.hexToColor('#ffde59');
+            // ctx_col.strokeColor = cc.Color(85,85,85,255);
+            ctx_col.fillColor = cc.Color(85,85,85,255);
             ctx_col.moveTo(index*60,0)
             ctx_col.lineTo(index*60,600)
             ctx_col.stroke()
@@ -434,8 +455,6 @@ cc.Class({
         this.curScore = 0
         this.lb_curScore.string = this.curScore
         this.clearjudgecache()
-        // this.randball()
-
         var temparray = []
         for (let index = 0; index < this.ballsArray.length; index++) {
             if(this.ballsArray[index].comp.getstate() == false){
@@ -445,8 +464,26 @@ cc.Class({
         this.setRandomBalls(1,temparray)
     },
 
+    closerank(){
+        this.n_opendata.active = false
+    },
+
     gameover(){
         var self = this
+        var curScore = this.curScore + ""
+        this.n_opendata.active = true
+        wx.setUserCloudStorage({
+            KVDataList: [{ key: '_score', value: curScore }],
+            success: res => {
+                let openDataContext = wx.getOpenDataContext();
+                openDataContext.postMessage({
+                });
+            },
+            fail: res => {
+                // console.log("setUserCloudStorage -------->fail")
+                // console.log(res);
+            }
+        });
         wx.showModal({
             title: '',
             content: '无子可落,游戏结束!',
@@ -461,7 +498,27 @@ cc.Class({
         // wx.exitMiniProgram({})
         this.clearAll()
     },
-    update: function (dt) {
+    onShowRank(){
+        this.n_opendata.active = true
+    },
+    _updateSubDomainCanvas () {
+        if (!this.tex) {
+            return;
+        }
+        var openDataContext = wx.getOpenDataContext();
+        var sharedCanvas = openDataContext.canvas;
+        this.tex.initWithElement(sharedCanvas);
+        this.tex.handleLoadedTexture();
+        this.s_display.spriteFrame = new cc.SpriteFrame(this.tex);
+    },
+    update(dt) {
+        this._updateSubDomainCanvas();
+    },
+    openDes(){
+        this.n_opendata2.active = true 
+    },
 
+    closeDes(){
+        this.n_opendata2.active = false 
     },
 });

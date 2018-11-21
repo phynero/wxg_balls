@@ -25,7 +25,6 @@
     "REMOTE_SERVER_ROOT": "",
     "orientation": "portrait"
   },
-  "renderMode": "0",
   "startScene": "41601d71-8dcf-40d0-9d14-7111604aa63c",
   "title": "balls",
   "webOrientation": "auto",
@@ -34,7 +33,7 @@
     "appid": "wxa13bad66882314ba",
     "isSubdomain": false,
     "orientation": "portrait",
-    "subContext": ""
+    "subContext": "balls_openContent"
   },
   "xxteaKey": "7843b424-8b7e-47",
   "zipCompressJs": true
